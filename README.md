@@ -70,8 +70,17 @@ docker compose ps   # verify containers are running
 
 ### 5 — Add Trusted Domain (Tailscale IP)
 
+> [!NOTE]
+> ถ้า setup ผ่าน browser (ไม่ได้ตั้ง `NEXTCLOUD_ADMIN_USER`/`NEXTCLOUD_ADMIN_PASSWORD` ใน `.env`) Nextcloud จะ auto-add trusted domain ให้เอง ไม่ต้องรัน command นี้
+>
+> แต่ถ้าตั้ง admin credentials ใน `.env` ไว้ Nextcloud จะ auto-install และต้องรัน occ เองหลัง install เสร็จ
+
 ```bash
+# If accessing via browser shows "untrusted domain" error:
 docker exec -u 33 -it nextcloud php occ config:system:set trusted_domains 1 --value=<tailscale-ip>
+
+# If data directory permission error appears:
+sudo chown -R 33:33 /mnt/nas/nextcloud
 ```
 
 > Replace `<tailscale-ip>` with your server's Tailscale IP e.g. `100.84.x.x`
