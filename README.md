@@ -68,7 +68,7 @@ server
 **1. Clone the repo:**
 ```bash
 git clone https://github.com/AssachanDev/nextcloud-docker.git
-cd nextcloud
+cd nextcloud-docker
 ```
 
 **2. Configure environment:**
@@ -126,7 +126,7 @@ server
 
 Fill in the multi-tenant section in `.env`:
 ```env
-DATA_PATH=/mnt/nas/nextcloud
+DATA_PATH=/path/to/your/data
 
 TENANT_A_NAME=company-a
 TENANT_A_PORT=9090
@@ -205,7 +205,7 @@ Each instance has its own admin panel. Login with `admin` and the password you s
 ## File Structure
 
 ```
-nextcloud/
+nextcloud-docker/
 ├── docker-compose.yml        # single instance
 ├── docker-compose.multi.yml  # multi-tenant
 ├── .env                      # your secrets — not committed
