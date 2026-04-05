@@ -1,0 +1,71 @@
+services:
+
+  # ─── Tenant A ─────────────────────────────────────────────────────────────
+  tenant-a-db:
+    image: mariadb:10.11
+    container_name: ${TENANT_A_NAME}-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TENANT_A_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${TENANT_A_NAME}
+      MYSQL_USER: ${TENANT_A_NAME}
+      MYSQL_PASSWORD: ${TENANT_A_MYSQL_PASSWORD}
+    volumes:
+      - tenant-a-db:/var/lib/mysql
+
+  tenant-a:
+    image: nextcloud:28
+    container_name: ${TENANT_A_NAME}-nextcloud
+    restart: always
+    ports:
+      - "${TENANT_A_PORT:-9090}:80"
+    depends_on:
+      - tenant-a-db
+    environment:
+      MYSQL_HOST: ${TENANT_A_NAME}-db
+      MYSQL_DATABASE: ${TENANT_A_NAME}
+      MYSQL_USER: ${TENANT_A_NAME}
+      MYSQL_PASSWORD: ${TENANT_A_MYSQL_PASSWORD}
+      NEXTCLOUD_ADMIN_USER: ${ADMIN_USER:-admin}
+      NEXTCLOUD_ADMIN_PASSWORD: ${TENANT_A_ADMIN_PASSWORD}
+    volumes:
+      - tenant-a-data:/var/www/html
+      - ${DATA_PATH:-/mnt/nas/nextcloud}/${TENANT_A_NAME}:/var/www/html/data
+
+  # ─── Tenant B ─────────────────────────────────────────────────────────────
+  tenant-b-db:
+    image: mariadb:10.11
+    container_name: ${TENANT_B_NAME}-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TENANT_B_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${TENANT_B_NAME}
+      MYSQL_USER: ${TENANT_B_NAME}
+      MYSQL_PASSWORD: ${TENANT_B_MYSQL_PASSWORD}
+    volumes:
+      - tenant-b-db:/var/lib/mysql
+
+  tenant-b:
+    image: nextcloud:28
+    container_name: ${TENANT_B_NAME}-nextcloud
+    restart: always
+    ports:
+      - "${TENANT_B_PORT:-9091}:80"
+    depends_on:
+      - tenant-b-db
+    environment:
+      MYSQL_HOST: ${TENANT_B_NAME}-db
+      MYSQL_DATABASE: ${TENANT_B_NAME}
+      MYSQL_USER: ${TENANT_B_NAME}
+      MYSQL_PASSWORD: ${TENANT_B_MYSQL_PASSWORD}
+      NEXTCLOUD_ADMIN_USER: ${ADMIN_USER:-admin}
+      NEXTCLOUD_ADMIN_PASSWORD: ${TENANT_B_ADMIN_PASSWORD}
+    volumes:
+      - tenant-b-data:/var/www/html
+      - ${DATA_PATH:-/mnt/nas/nextcloud}/${TENANT_B_NAME}:/var/www/html/data
+
+volumes:
+  tenant-a-db:
+  tenant-a-data:
+  tenant-b-db:
+  tenant-b-data:
