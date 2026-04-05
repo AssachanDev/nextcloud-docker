@@ -65,7 +65,13 @@ server
 └── nextcloud  →  :8080  →  /your/data/path/
 ```
 
-**1. Configure environment:**
+**1. Clone the repo:**
+```bash
+git clone https://github.com/AssachanDev/nextcloud-docker.git
+cd nextcloud
+```
+
+**2. Configure environment:**
 ```bash
 cp .env.example .env
 nano .env
@@ -80,28 +86,28 @@ ADMIN_PASSWORD=your_strong_password
 MYSQL_ROOT_PASSWORD=your_strong_password
 MYSQL_PASSWORD=your_strong_password
 
-DATA_PATH=/mnt/nas/nextcloud
+DATA_PATH=/path/to/your/data
 ```
 
-**2. Create data directory:**
+**3. Create data directory:**
 ```bash
-sudo mkdir -p /mnt/nas/nextcloud
-sudo chown -R 33:33 /mnt/nas/nextcloud
+sudo mkdir -p /path/to/your/data
+sudo chown -R 33:33 /path/to/your/data
 ```
 
-**3. Start:**
+**4. Start:**
 ```bash
 docker compose up -d
 docker compose ps
 ```
 
-**4. Add trusted domain:**
+**5. Add trusted domain:**
 ```bash
 docker exec -u 33 -it nextcloud php occ \
   config:system:set trusted_domains 1 --value=<tailscale-ip>
 ```
 
-**5. Access:** `http://<tailscale-ip>:8080`
+**6. Access:** `http://<tailscale-ip>:8080`
 
 ---
 
@@ -139,9 +145,9 @@ TENANT_B_MYSQL_PASSWORD=your_strong_password
 
 **2. Create data directories:**
 ```bash
-sudo mkdir -p /mnt/nas/nextcloud/company-a
-sudo mkdir -p /mnt/nas/nextcloud/company-b
-sudo chown -R 33:33 /mnt/nas/nextcloud/
+sudo mkdir -p $DATA_PATH/company-a
+sudo mkdir -p $DATA_PATH/company-b
+sudo chown -R 33:33 $DATA_PATH/
 ```
 
 **3. Start:**
